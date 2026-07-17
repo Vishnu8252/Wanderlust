@@ -13,6 +13,7 @@ const dbUrl=process.env.ATLASDB_URL;
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
+const adminRouter = require("./routes/admin");
 
 
 const session =require("express-session");
@@ -93,7 +94,7 @@ async function main() {
 app.get("/", (req, res) => {
     res.redirect("/listings");
 })
-
+app.use("/admin", adminRouter);
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);

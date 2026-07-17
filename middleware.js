@@ -40,3 +40,12 @@ module.exports.isReviewAuthor=async(req,res,next)=>{
     }
     next();
 }
+module.exports.isAdmin = (req, res, next) => {
+    console.log(req.user);
+    if (!req.user || !req.user.isAdmin) {
+        
+        req.flash("error", "You are not authorized!");
+        return res.redirect("/listings");
+    }
+    next();
+};

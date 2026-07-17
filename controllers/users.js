@@ -33,6 +33,10 @@ module.exports.renderLoginForm = (req, res) => {
 
 // Login
 module.exports.login = async (req, res) => {
+    if (req.user.isAdmin) {
+        req.flash("success", "Welcome Admin!");
+        return res.redirect("/admin");
+    }
     req.flash("success", "Welcome back!");
 
     let redirectUrl = res.locals.redirectUrl || "/listings";
