@@ -233,3 +233,83 @@
     background: #e63946;
     color: white;
 }
+.wishlist-form{
+    position:absolute;
+    top:12px;
+    right:15px;
+    z-index:10;
+}
+
+.wishlist-btn{
+    border:none;
+    background:white;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    font-size:22px;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+    transition:.2s;
+}
+
+.wishlist-btn:hover{
+    transform:scale(1.1);
+}
+
+.booking-card{
+    border:none;
+    border-radius:20px;
+    overflow:hidden;
+    transition:0.3s;
+}
+
+.booking-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 25px rgba(0,0,0,0.18);
+}
+
+.booking-card img{
+    border-top-left-radius:20px;
+    border-top-right-radius:20px;
+}
+
+.booking-card .card-body{
+    padding:20px;
+}
+.booking-card{
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+    transition:0.3s ease;
+}
+
+.booking-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.18);
+}
+
+.booking-card img{
+    border-top-left-radius:18px;
+    border-top-right-radius:18px;
+}
+
+.booking-card .card-body{
+    padding:20px;
+}
+
+.cancelled-card{
+    opacity:0.75;
+}
+
+.cancelled-card img{
+    filter:grayscale(60%);
+}
+
+.badge{
+    padding:10px 14px;
+    border-radius:20px;
+}
+
+.booking-card .btn{
+    border-radius:10px;
+}

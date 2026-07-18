@@ -1,20 +1,21 @@
 const Listing = require("../models/listing.js");
 const axios = require("axios");
+const User = require("../models/user");
+const Booking = require("../models/booking");
 
 // Index Route
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});
     res.render("listings/index.ejs", { allListings,selectedCategory:"trending" ,});
 };
-
-// Render New Form
 module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs");
 };
 
-// Show Listing
+// Render New Form
 module.exports.showListing = async (req, res) => {
-    let { id } = req.params;
+
+    const { id } = req.params;
 
     const listing = await Listing.findById(id)
         .populate({
@@ -30,9 +31,24 @@ module.exports.showListing = async (req, res) => {
         return res.redirect("/listings");
     }
 
-    res.render("listings/show.ejs", { listing });
-};
+    let isWishlisted = false;
 
+    if (req.user) {
+        const user = await User.findById(req.user._id);
+        isWishlisted = user.wishlist.includes(listing._id);
+    }
+
+    const bookings = await Booking.find({
+        listing: listing._id,
+        status: "Confirmed",
+    });
+
+    res.render("listings/show.ejs", {
+        listing,
+        isWishlisted,
+        bookings,
+    });
+};
 // Create Listing
 module.exports.createListing = async (req, res) => {
     const url = req.file.path;

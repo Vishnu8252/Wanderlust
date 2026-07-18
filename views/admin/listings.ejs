@@ -1,0 +1,112 @@
+<% layout("/layouts/admin") %>
+
+
+
+<div class="top-bar">
+
+    <h2>🏠 Listing Management</h2>
+
+    <form action="/admin/listings" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="search"
+            value="<%= search %>"
+            placeholder="Search listings..."
+        >
+
+        <button type="submit">
+            🔍
+        </button>
+
+    </form>
+
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+
+<thead class="table-dark">
+
+<tr>
+
+<th>#</th>
+<th>Image</th>
+<th>Title</th>
+<th>Owner</th>
+<th>Category</th>
+<th>Price</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% listings.forEach((listing,index)=>{ %>
+
+<tr>
+
+<td><%= index+1 %></td>
+
+<td>
+
+<img
+src="<%= listing.image.url %>"
+width="90"
+height="70"
+style="object-fit:cover;border-radius:8px;"
+>
+
+</td>
+
+<td><%= listing.title %></td>
+
+<td>
+
+<%= listing.owner ? listing.owner.username : "No Owner" %>
+
+</td>
+
+<td><%= listing.category %></td>
+
+<td>₹ <%= listing.price %></td>
+
+<td>
+
+<a
+href="/listings/<%= listing._id %>"
+class="btn btn-primary btn-sm"
+>
+View
+</a>
+<form
+        action="/admin/listings/<%= listing._id %>?_method=DELETE"
+        method="POST"
+        style="display:inline;"
+        onsubmit="return confirm('Delete this listing?')"
+    >
+
+        <button class="btn btn-danger btn-sm">
+            Delete
+        </button>
+
+    </form>
+    <a
+    href="/admin/listings/<%= listing._id %>/edit"
+    class="btn btn-warning btn-sm"
+>
+    Edit
+</a>
+
+
+</td>
+
+</tr>
+
+
+<% }) %>
+
+</tbody>
+
+</table>

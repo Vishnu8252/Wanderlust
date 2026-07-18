@@ -34,29 +34,146 @@
 
                 <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
 
-                <a
-                    href="/listings/<%= listing._id %>/edit"
-                    class="btn btn-dark"
-                >
-                    Edit
-                </a>
+                    <a
+                        href="/listings/<%= listing._id %>/edit"
+                        class="btn btn-dark"
+                    >
+                        Edit
+                    </a>
 
-                <form
-                    method="POST"
-                    action="/listings/<%= listing._id %>?_method=DELETE"
-                    class="d-inline"
-                >
-                    <button class="btn btn-dark">
-                        Delete
-                    </button>
-                </form>
+                    <form
+                        method="POST"
+                        action="/listings/<%= listing._id %>?_method=DELETE"
+                        class="d-inline"
+                    >
+                        <button class="btn btn-dark">
+                            Delete
+                        </button>
+                    </form>
 
                 <% } %>
+
+                <% if(currUser){ %>
+
+                    <form
+                        method="POST"
+                        action="/wishlist/<%= listing._id %>"
+                        class="d-inline ms-2"
+                    >
+                    
+                        <% if(isWishlisted){ %>
+                    
+                            <button class="btn btn-danger">
+                                ❤️ Wishlisted
+                            </button>
+                    
+                        <% } else { %>
+                    
+                            <button class="btn btn-outline-danger">
+                                🤍 Wishlist
+                            </button>
+                    
+                        <% } %>
+                    
+                    </form>
+                    
+                    <% } %>
+
+                    <% if(currUser){ %>
+
+                        <hr>
+
+                        
+                        <h4>Book this Stay</h4>
+                        <script>
+                            const bookedDates = <%- JSON.stringify(bookings) %>;
+                            </script>
+                       
+                       <form
+                         id="booking-form"
+                        action="/listings/<%= listing._id %>/bookings"
+                        method="POST"
+                            >
+                        
+                            <div class="mb-3">
+                        
+                                <label class="form-label">
+                                    Check-In
+                                </label>
+                        
+                                <input
+                                    type="text"
+                                    name="checkIn"
+                                    id="checkIn"
+                                    class="form-control"
+                                    required
+                                >
+                        
+                            </div>
+                        
+                            <div class="mb-3">
+                        
+                                <label class="form-label">
+                                    Check-Out
+                                </label>
+                        
+                                <input
+                                    type="text"
+                                    name="checkOut"
+                                    
+                                    id="checkOut"
+                                    class="form-control"
+                                    required
+                                >
+                        
+                            </div>
+                        
+                            <div class="mb-3">
+                        
+                                <label class="form-label">
+                                    Guests
+                                </label>
+                        
+                                <input
+                                    type="number"
+                                    name="guests"
+                                    min="1"
+                                    value="1"
+                                    class="form-control"
+                                >
+                        
+                            </div>
+                            <input
+                            type="hidden"
+                            id="listingId"
+                            value="<%= listing._id %>"
+                        >
+                        <input
+                        type="hidden"
+                        id="pricePerNight"
+                        value="<%= listing.price %>"
+                    >
+                             
+                        
+                            <button
+                            type="button"
+                            id="pay-btn"
+                            class="btn btn-danger"
+                        >
+                            Pay & Book
+                        </button>
+                        
+                        </form>
+                        
+                        <hr>
+                        
+                        <% } %>
 
             </div>
         </div>
     </div>
 </div>
+
 
 <div id="map"></div>
 
@@ -205,6 +322,6 @@
     const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
     const listingTitle = "<%= listing.title %>";
 </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/js/payment.js"></script>
 
-
-<script src="/js/map.js"></script>

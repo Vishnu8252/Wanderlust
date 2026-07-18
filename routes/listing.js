@@ -59,7 +59,7 @@ router.post(
 // Show Route
 router.get(
     "/:id",
-    isLoggedIn,
+    
     wrapAsync(listingController.showListing)
 );
 

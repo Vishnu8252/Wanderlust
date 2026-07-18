@@ -42,9 +42,41 @@
           <a class="nav-link auth-btn" href="/login"><b>Log In</b></a>
         <% } %>
 
-        <% if (currUser) { %>
-          <a class="nav-link logout-btn" href="/logout"><b>Log Out</b></a>
+      
+
+        
+      <% if(currUser){ %>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/wishlist">
+              ❤️ Wishlist
+          </a>
+      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/bookings">
+                My Bookings
+            </a>
+        </li>
         <% } %>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/profile" title="My Profile">
+            <% if (currUser && currUser.profileImage) { %>
+              <img
+                  src="<%= currUser.profileImage.url %>"
+                  alt="Profile"
+                  style="width:35px; height:35px; border-radius:50%; object-fit:cover;"
+              >
+          <% } else { %>
+              <img
+                  src="https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+                  alt="Profile"
+                  style="width:35px; height:35px; border-radius:50%; object-fit:cover;"
+              >
+          <% } %>
+          </a>
+      </li>
+      
 
       </div>
 

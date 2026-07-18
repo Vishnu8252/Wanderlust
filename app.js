@@ -14,6 +14,8 @@ const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
 const adminRouter = require("./routes/admin");
+const bookingRouter = require("./routes/booking");
+app.use(express.json());
 
 
 const session =require("express-session");
@@ -98,7 +100,8 @@ app.use("/admin", adminRouter);
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
-
+app.use("/listings/:id/bookings", bookingRouter);
+app.use("/bookings", bookingRouter);
 
 
 app.all("/*splat",(req,res,next)=>{

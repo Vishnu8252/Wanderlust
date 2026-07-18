@@ -1,0 +1,63 @@
+<% layout("/layouts/admin") %>
+
+<h2 class="mb-4">⭐ Review Management</h2>
+
+<table class="table table-bordered">
+
+<thead>
+<tr>
+<th>#</th>
+<th>Listing</th>
+<th>User</th>
+<th>Rating</th>
+<th>Comment</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+<%
+let count = 1;
+listings.forEach(listing => {
+    listing.reviews.forEach(review => {
+%>
+
+<tr>
+
+<td><%= count++ %></td>
+
+<td><%= listing.title %></td>
+
+<td><%= review.author ? review.author.username : "Unknown" %></td>
+
+<td>⭐ <%= review.rating %></td>
+
+<td><%= review.comment %></td>
+
+<td>
+
+<form
+action="/admin/reviews/<%= review._id %>?_method=DELETE"
+method="POST"
+onsubmit="return confirm('Delete this review?')"
+>
+
+<button class="btn btn-danger btn-sm">
+Delete
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+<%
+    });
+});
+%>
+
+</tbody>
+
+</table>

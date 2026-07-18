@@ -16,7 +16,40 @@ const userSchema = new Schema({
     isBanned: {
         type: Boolean,
         default: false,
-    }
+    },
+
+    profileImage: {
+        url: {
+            type: String,
+            default: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+        },
+        filename: {
+            type: String,
+            default: ""
+        }
+    },
+
+    bio: {
+        type: String,
+        default: ""
+    },
+
+    phone: {
+        type: String,
+        default: ""
+    },
+    wishlist: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Listing",
+        }
+    ],
+    bookings: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Booking",
+        }
+    ],
 });
 
 userSchema.plugin(passportLocalMongoose);

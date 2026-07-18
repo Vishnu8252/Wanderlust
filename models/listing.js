@@ -62,6 +62,12 @@ category: {
   ],
   default: "trending",
 },
+bookings: [
+  {
+      type: Schema.Types.ObjectId,
+      ref: "Booking",
+  }
+],
   });
 
   listingSchema.post("findOneAndDelete", async (listing) => {

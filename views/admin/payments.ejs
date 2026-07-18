@@ -1,0 +1,84 @@
+<% layout("/layouts/admin") %>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">💳 All Payments</h2>
+
+    <table class="table table-bordered table-hover align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>User</th>
+                <th>Listing</th>
+                <th>Amount</th>
+                <th>Payment ID</th>
+                <th>Order ID</th>
+                <th>Payment Status</th>
+                <th>Refund Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <% bookings.forEach(booking => { %>
+
+            <tr>
+
+                <td><%= booking.user.username %></td>
+
+                <td><%= booking.listing.title %></td>
+
+                <td>₹<%= booking.totalPrice %></td>
+
+                <td><%= booking.paymentId || "-" %></td>
+
+                <td><%= booking.orderId || "-" %></td>
+
+                <td>
+                    <% if(booking.paymentStatus==="Paid"){ %>
+
+                        <span class="badge bg-success">
+                            Paid
+                        </span>
+
+                    <% } else { %>
+
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+
+                    <% } %>
+                </td>
+
+                <td>
+
+                    <% if(booking.refundStatus==="Refunded"){ %>
+
+                        <span class="badge bg-info">
+                            Refunded
+                        </span>
+
+                    <% } else { %>
+
+                        <span class="badge bg-secondary">
+                            Not Refunded
+                        </span>
+
+                    <% } %>
+
+                </td>
+
+                <td>
+                    <%= booking.createdAt.toDateString() %>
+                </td>
+
+            </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
