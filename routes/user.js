@@ -8,7 +8,7 @@ const { saveRedirectUrl,isLoggedIn } = require("../middleware");
 
 const userController = require("../controllers/users");
 const multer = require("multer");
-const { storage } = require("../cloudConfig");
+const { storage } = require("../cloudconfig");
 const upload = multer({ storage });
 
 // Signup
