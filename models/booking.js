@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const bookingSchema = new Schema(
 {
@@ -27,12 +27,15 @@ const bookingSchema = new Schema(
 
     guests: {
         type: Number,
+        required: true,
+        min: 1,
         default: 1,
     },
 
     totalPrice: {
         type: Number,
         required: true,
+        min: 0,
     },
 
     status: {
@@ -41,23 +44,36 @@ const bookingSchema = new Schema(
         default: "Confirmed",
     },
 
-    createdAt: {
-        type: Date,
-        default: Date.now,
+    paymentId: {
+        type: String,
+        default: "",
     },
-    paymentId: String,
 
-orderId: String,
+    orderId: {
+        type: String,
+        default: "",
+    },
 
-paymentStatus: {
-    type: String,
-    default: "Pending"
+    paymentStatus: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed", "Refunded"],
+        default: "Pending",
+    },
+
+    refundId: {
+        type: String,
+        default: "",
+    },
+
+    refundStatus: {
+        type: String,
+        enum: ["Not Refunded", "Refunded"],
+        default: "Not Refunded",
+    },
 },
-refundId: String,
-refundStatus: {
-    type: String,
-    default: "Not Refunded"
+{
+    timestamps: true,
 }
-});
+);
 
 module.exports = mongoose.model("Booking", bookingSchema);

@@ -1,69 +1,160 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="container mt-5">
+<div class="container my-5">
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-8 offset-md-2">
+        <div class="col-lg-8 col-md-10">
 
-            <div class="card shadow p-4">
+            <div class="card shadow border-0">
 
-                <h2>Edit Profile</h2>
-                <form
-                action="/profile?_method=PUT"
-                method="POST"
-                enctype="multipart/form-data"
-            >
+                <div class="card-body p-4">
 
-                    <div class="mb-3">
+                    <h2 class="fw-bold mb-4">
+                        Edit Profile
+                    </h2>
 
-                        <label class="form-label">
-                            Bio
-                        </label>
+                    <form
+                        action="/profile?_method=PUT"
+                        method="POST"
+                        enctype="multipart/form-data"
+                        class="needs-validation"
+                        novalidate
+                        autocomplete="off"
+                    >
 
-                        <textarea
-                            class="form-control"
-                            name="bio"
-                            rows="4"
-                        ><%= user.bio %></textarea>
+                        <!-- Current Profile Image -->
 
-                    </div>
+                        <div class="text-center mb-4">
 
-                    <div class="mb-3">
+                            <img
+                                src="<%= user.profileImage?.url || '/images/default-profile.png' %>"
+                                alt="<%= user.username %>"
+                                class="rounded-circle shadow"
+                                width="140"
+                                height="140"
+                                loading="lazy"
+                                style="object-fit:cover;"
+                            >
 
-                        <label class="form-label">
-                            Phone
-                        </label>
+                        </div>
 
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="phone"
-                            value="<%= user.phone %>"
-                        >
+                        <!-- Bio -->
 
+                        <div class="mb-3">
 
-                    </div>
-                    <div class="mb-3">
+                            <label
+                                for="bio"
+                                class="form-label"
+                            >
+                                Bio
+                            </label>
 
-                        <label class="form-label">
-                            Profile Photo
-                        </label>
-                    
-                        <input
-                            type="file"
-                            name="profileImage"
-                            class="form-control"
-                            accept="image/*"
-                        >
-                    
-                    </div>
+                            <textarea
+                                id="bio"
+                                name="bio"
+                                rows="4"
+                                class="form-control"
+                                placeholder="Tell us something about yourself..."
+                                maxlength="300"
+                            ><%= user.bio || "" %></textarea>
 
-                    <button class="btn btn-success">
-                        Save Changes
-                    </button>
+                            <div class="form-text">
+                                Maximum 300 characters.
+                            </div>
 
-                </form>
+                        </div>
+
+                        <!-- Phone -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="phone"
+                                class="form-label"
+                            >
+                                Phone Number
+                            </label>
+
+                            <input
+                                id="phone"
+                                type="tel"
+                                name="phone"
+                                class="form-control"
+                                value="<%= user.phone || "" %>"
+                                placeholder="Enter phone number"
+                                pattern="[0-9]{10}"
+                            >
+
+                            <div class="invalid-feedback">
+                                Enter a valid 10-digit phone number.
+                            </div>
+
+                        </div>
+
+                        <!-- Profile Image -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="profileImage"
+                                class="form-label"
+                            >
+                                Profile Photo
+                            </label>
+
+                            <input
+                                id="profileImage"
+                                type="file"
+                                name="profileImage"
+                                class="form-control"
+                                accept="image/*"
+                            >
+
+                        </div>
+
+                        <!-- Preview -->
+
+                        <div class="text-center mb-4">
+
+                            <img
+                                id="preview"
+                                class="img-fluid rounded shadow d-none"
+                                style="max-height:250px;"
+                                alt="Preview"
+                            >
+
+                        </div>
+
+                        <!-- Buttons -->
+
+                        <div class="d-grid gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                            >
+
+                                <i class="fa-solid fa-floppy-disk"></i>
+
+                                Save Changes
+
+                            </button>
+
+                            <a
+                                href="/profile"
+                                class="btn btn-outline-secondary"
+                            >
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
 
@@ -72,3 +163,26 @@
     </div>
 
 </div>
+
+<script>
+
+const imageInput =
+document.querySelector("#profileImage");
+
+const preview =
+document.querySelector("#preview");
+
+imageInput.addEventListener("change", () => {
+
+    const file = imageInput.files[0];
+
+    if (!file) return;
+
+    preview.src =
+    URL.createObjectURL(file);
+
+    preview.classList.remove("d-none");
+
+});
+
+</script>

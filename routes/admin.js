@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const { storage } = require("../cloudconfig.");
+const { storage } = require("../cloudconfig.js");
 const upload = multer({ storage });
-const Review = require("../models/review");
 const wrapAsync = require("../utils/wrapAsync.js");
 const adminController = require("../controllers/admin");
 const { isLoggedIn, isAdmin } = require("../middleware");

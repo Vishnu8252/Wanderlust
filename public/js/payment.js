@@ -1,149 +1,201 @@
-document.getElementById("pay-btn").addEventListener("click", async (e) => {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
 
-    try {
+    const payBtn = document.getElementById("pay-btn");
 
-        const form = document.getElementById("booking-form");
-        const formData = new FormData(form);
+    if (!payBtn) return;
 
-        const checkIn = formData.get("checkIn");
-        const checkOut = formData.get("checkOut");
-        const guests = formData.get("guests");
+    payBtn.addEventListener("click", async (e) => {
 
-        if (!checkIn || !checkOut) {
-            alert("Please select check-in and check-out dates.");
-            return;
-        }
+        e.preventDefault();
 
-        const checkInDate = new Date(checkIn);
-        const checkOutDate = new Date(checkOut);
+        try {
 
-        const nights = Math.ceil(
-            (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)
-        );
+            const form = document.getElementById("booking-form");
+            const formData = new FormData(form);
 
-        if (nights <= 0) {
-            alert("Check-out date must be after Check-in date.");
-            return;
-        }
+            const listingId = document.getElementById("listingId").value;
+            const checkIn = formData.get("checkIn");
+            const checkOut = formData.get("checkOut");
+            const guests = formData.get("guests");
 
-        const pricePerNight = Number(
-            document.getElementById("pricePerNight").value
-        );
+            if (!checkIn || !checkOut) {
+                alert("Please select Check-In and Check-Out dates.");
+                return;
+            }
 
-        const amount = nights * pricePerNight;
+            const checkInDate = new Date(checkIn);
+            const checkOutDate = new Date(checkOut);
 
-        const response = await fetch("/bookings/create-order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ amount }),
-        });
+            const nights = Math.ceil(
+                (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)
+            );
 
-        if (!response.ok) {
-            throw new Error("Unable to create Razorpay order");
-        }
+            if (nights <= 0) {
+                alert("Check-Out date must be after Check-In date.");
+                return;
+            }
 
-        const order = await response.json();
+            // ===============================
+            // Create Razorpay Order
+            // ===============================
 
-        const options = {
-            key: "rzp_test_TEYTcNzpbq9dsH",
-            amount: order.amount,
-            currency: order.currency,
-            name: "Wanderlust",
-            description: "Stay Booking",
-            image: "/images/logo.png",
-            order_id: order.id,
+            const orderResponse = await fetch("/bookings/create-order", {
 
-            handler: async function (response) {
+                method: "POST",
 
-                const data = {
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature,
+                headers: {
+                    "Content-Type": "application/json",
+                },
 
-                    listingId: document.getElementById("listingId").value,
+                body: JSON.stringify({
+                    listingId,
                     checkIn,
                     checkOut,
-                    guests
-                };
+                    guests,
+                }),
 
-                const verify = await fetch("/bookings/verify-payment", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
+            });
 
-                const result = await verify.json();
+            const orderData = await orderResponse.json();
 
-                if (result.success) {
-                    alert("Payment Verified & Booking Confirmed!");
-                    window.location.href = "/bookings";
-                } else {
-                    alert("Payment Verification Failed!");
-                }
-            },
-
-            prefill: {
-                name: "",
-                email: "",
-                contact: ""
-            },
-
-            notes: {
-                booking: "Wanderlust Booking"
-            },
-
-            theme: {
-                color: "#fe424d"
-            },
-
-            modal: {
-                ondismiss: function () {
-                    console.log("Payment popup closed");
-                }
-            },
-
-            config: {
-                display: {
-                    blocks: {
-                        upi: {
-                            name: "Pay using UPI",
-                            instruments: [
-                                {
-                                    method: "upi"
-                                }
-                            ]
-                        }
-                    },
-                    sequence: [
-                        "block.upi",
-                        "block.card",
-                        "block.netbanking"
-                    ],
-                    preferences: {
-                        show_default_blocks: true
-                    }
-                }
+            if (!orderData.success) {
+                throw new Error(orderData.message);
             }
-        };
 
-        const rzp = new Razorpay(options);
+            const order = orderData.order;
 
-        rzp.on("payment.failed", function (response) {
-            alert("Payment Failed!");
-            console.log(response.error);
-        });
+            // ===============================
+            // Razorpay Checkout
+            // ===============================
 
-        rzp.open();
+            const options = {
 
-    } catch (err) {
+                key: "rzp_test_TEYTcNzpbq9dsH",
 
-        console.error(err);
-        alert(err.message);
+                amount: order.amount,
 
-    }
+                currency: order.currency,
+
+                name: "Wanderlust",
+
+                description: "Stay Booking",
+
+                image: "/images/logo.png",
+
+                order_id: order.id,
+
+                handler: async function (response) {
+
+                    try {
+
+                        const verifyResponse = await fetch("/bookings/verify-payment", {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+
+                            body: JSON.stringify({
+
+                                razorpay_order_id: response.razorpay_order_id,
+
+                                razorpay_payment_id: response.razorpay_payment_id,
+
+                                razorpay_signature: response.razorpay_signature,
+
+                                listingId,
+
+                                checkIn,
+
+                                checkOut,
+
+                                guests,
+
+                            }),
+
+                        });
+
+                        const verifyData = await verifyResponse.json();
+
+                        if (verifyData.success) {
+
+                            alert("✅ Booking Confirmed!");
+
+                            window.location.href = "/bookings/my";
+
+                        } else {
+
+                            alert(verifyData.message || "Payment Verification Failed");
+
+                        }
+
+                    } catch (err) {
+
+                        console.error(err);
+
+                        alert("Payment Verification Failed.");
+
+                    }
+
+                },
+
+                prefill: {
+
+                    name: "",
+
+                    email: "",
+
+                    contact: "",
+
+                },
+
+                notes: {
+
+                    booking: "Wanderlust Booking",
+
+                },
+
+                theme: {
+
+                    color: "#fe424d",
+
+                },
+
+                modal: {
+
+                    ondismiss: function () {
+
+                        console.log("Payment popup closed.");
+
+                    }
+
+                }
+
+            };
+
+            const rzp = new Razorpay(options);
+
+            rzp.on("payment.failed", function (response) {
+
+                console.error(response.error);
+
+                alert(response.error.description);
+
+            });
+
+            rzp.open();
+
+        }
+
+        catch (err) {
+
+            console.error(err);
+
+            alert(err.message || "Unable to create Razorpay order.");
+
+        }
+
+    });
+
 });

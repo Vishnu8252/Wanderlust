@@ -31,7 +31,11 @@ router
     );
 
 // Logout
-router.get("/logout", userController.logout);
+router.get(
+    "/logout",
+    isLoggedIn,
+    userController.logout
+);
 router.get(
     "/profile",
     isLoggedIn,

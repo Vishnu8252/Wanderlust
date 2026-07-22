@@ -1,88 +1,154 @@
-const User = require("../models/user.js");
+const User = require("../models/user");
+const Listing = require("../models/listing");
 
+// ==============================
 // Render Signup Form
+// ==============================
+
 module.exports.renderSignupForm = (req, res) => {
-    res.render("users/signup.ejs");
+    res.render("users/signup");
 };
 
+
+// ==============================
 // Signup
+// ==============================
+
 module.exports.signup = async (req, res, next) => {
-    let { username, email, password } = req.body;
 
-    const newUser = new User({
-        email,
-        username,
-    });
+    try {
 
-    const registeredUser = await User.register(newUser, password);
+        const { username, email, password } = req.body;
 
-    req.login(registeredUser, (err) => {
-        if (err) {
-            return next(err);
-        }
+        const newUser = new User({
+            username: username.trim(),
+            email: email.trim().toLowerCase(),
+        });
+        const registeredUser = await User.register(
+            newUser,
+            password
+        );
 
-        req.flash("success", "Welcome to Wanderlust!");
-        res.redirect("/listings");
-    });
-};
+        req.login(registeredUser, (err) => {
 
-// Render Login Form
-module.exports.renderLoginForm = (req, res) => {
-    res.render("users/login.ejs");
-};
+            if (err) return next(err);
 
-// Login
-module.exports.login = async (req, res) => {
-    if (req.user.isAdmin) {
-        req.flash("success", "Welcome Admin!");
-        return res.redirect("/admin");
+            req.flash(
+                "success",
+                "Welcome to Wanderlust!"
+            );
+
+            res.redirect("/listings");
+
+        });
+
+    } catch (err) {
+
+        req.flash("error", err.message);
+
+        res.redirect("/signup");
+
     }
+
+};
+
+
+// ==============================
+// Render Login Form
+// ==============================
+
+module.exports.renderLoginForm = (req, res) => {
+    res.render("users/login");
+};
+
+
+// ==============================
+// Login
+// ==============================
+
+module.exports.login = (req, res) => {
+
+    if (req.user.isAdmin) {
+
+        req.flash("success", "Welcome Admin!");
+
+        return res.redirect("/admin");
+
+    }
+
     req.flash("success", "Welcome back!");
 
-    let redirectUrl = res.locals.redirectUrl || "/listings";
+    const redirectUrl =
+        res.locals.redirectUrl || "/listings";
+
     res.redirect(redirectUrl);
+
 };
 
+
+// ==============================
 // Logout
-module.exports.logout = (req, res, next) => {
-    req.logout((err) => {
-        if (err) {
-            return next(err);
-        }
+// ==============================
 
-        req.flash("success", "Logged out successfully!");
+module.exports.logout = (req, res, next) => {
+
+    req.logout((err) => {
+
+        if (err) return next(err);
+
+        req.flash(
+            "success",
+            "Logged out successfully."
+        );
+
         res.redirect("/listings");
+
     });
+
 };
+// ==============================
+// Show Profile
+// ==============================
+
 module.exports.showProfile = async (req, res) => {
 
     const user = await User.findById(req.user._id);
 
-    res.render("users/profile", { user });
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/listings");
+    }
+
+    res.render("users/profile", {
+        user,
+    });
 
 };
+
+
+// ==============================
+// Render Edit Profile Form
+// ==============================
+
 module.exports.editProfileForm = async (req, res) => {
 
     const user = await User.findById(req.user._id);
 
-    res.render("users/editProfile", { user });
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/listings");
+    }
 
-};
-
-module.exports.updateProfile = async (req, res) => {
-
-    const { bio, phone } = req.body;
-
-    await User.findByIdAndUpdate(req.user._id, {
-        bio,
-        phone
+    res.render("users/editProfile", {
+        user,
     });
 
-    req.flash("success", "Profile Updated Successfully!");
-
-    res.redirect("/profile");
-
 };
+
+
+// ==============================
+// Update Profile
+// ==============================
 
 module.exports.updateProfile = async (req, res) => {
 
@@ -90,22 +156,38 @@ module.exports.updateProfile = async (req, res) => {
 
     const user = await User.findById(req.user._id);
 
-    user.bio = bio;
-    user.phone = phone;
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/listings");
+    }
+
+    user.bio = bio?.trim() || "";
+    user.phone = phone?.trim() || "";
 
     if (req.file) {
+
         user.profileImage = {
             url: req.file.path,
-            filename: req.file.filename
+            filename: req.file.filename,
         };
+
     }
 
     await user.save();
 
-    req.flash("success", "Profile Updated Successfully!");
+    req.flash(
+        "success",
+        "Profile updated successfully."
+    );
 
     res.redirect("/profile");
+
 };
+
+
+// ==============================
+// Toggle Wishlist
+// ==============================
 
 module.exports.toggleWishlist = async (req, res) => {
 
@@ -113,19 +195,32 @@ module.exports.toggleWishlist = async (req, res) => {
 
     const user = await User.findById(req.user._id);
 
-    const exists = user.wishlist.includes(id);
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/listings");
+    }
+
+    const exists = user.wishlist.some(
+        (item) => item.toString() === id
+    );
 
     if (exists) {
 
         user.wishlist.pull(id);
 
-        req.flash("success", "Removed from Wishlist");
+        req.flash(
+            "success",
+            "Removed from wishlist."
+        );
 
     } else {
 
         user.wishlist.push(id);
 
-        req.flash("success", "Added to Wishlist");
+        req.flash(
+            "success",
+            "Added to wishlist."
+        );
 
     }
 
@@ -135,11 +230,23 @@ module.exports.toggleWishlist = async (req, res) => {
 
 };
 
+
+// ==============================
+// Show Wishlist
+// ==============================
+
 module.exports.showWishlist = async (req, res) => {
 
     const user = await User.findById(req.user._id)
         .populate("wishlist");
 
-    res.render("users/wishlist", { user });
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/listings");
+    }
+
+    res.render("users/wishlist", {
+        user,
+    });
 
 };

@@ -20,8 +20,9 @@ const listingController = require("../controllers/listings");
 
 // Validation Middleware
 const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body);
-
+    const { error } = listingSchema.validate(req.body, {
+        abortEarly: false,
+    });
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400, errMsg);

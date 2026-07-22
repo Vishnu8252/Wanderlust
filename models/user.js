@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const passportLocalMongoose = require("passport-local-mongoose").default;
 
-const userSchema = new Schema({
+const userSchema = new Schema(
+{
     email: {
         type: String,
         required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+        match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
     },
 
     isAdmin: {
@@ -21,36 +26,45 @@ const userSchema = new Schema({
     profileImage: {
         url: {
             type: String,
-            default: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+            default:
+                "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg",
         },
         filename: {
             type: String,
-            default: ""
-        }
+            default: "",
+        },
     },
 
     bio: {
         type: String,
-        default: ""
+        default: "",
+        trim: true,
     },
 
     phone: {
         type: String,
-        default: ""
+        default: "",
+        trim: true,
     },
+
     wishlist: [
         {
             type: Schema.Types.ObjectId,
             ref: "Listing",
-        }
+        },
     ],
+
     bookings: [
         {
             type: Schema.Types.ObjectId,
             ref: "Booking",
-        }
+        },
     ],
-});
+},
+{
+    timestamps: true,
+}
+);
 
 userSchema.plugin(passportLocalMongoose);
 

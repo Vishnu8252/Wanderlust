@@ -1,84 +1,101 @@
 <% layout("/layouts/admin") %>
 
-<div class="container mt-4">
+<div class="container my-5">
 
-    <h2 class="mb-4">💳 All Payments</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <table class="table table-bordered table-hover align-middle">
+        <h2 class="fw-bold">
+            💳 Payment Management
+        </h2>
 
-        <thead class="table-dark">
-            <tr>
-                <th>User</th>
-                <th>Listing</th>
-                <th>Amount</th>
-                <th>Payment ID</th>
-                <th>Order ID</th>
-                <th>Payment Status</th>
-                <th>Refund Status</th>
-                <th>Date</th>
-            </tr>
-        </thead>
+        <span class="badge bg-dark fs-6">
+            Total Payments: <%= bookings.length %>
+        </span>
 
-        <tbody>
+    </div>
 
-            <% bookings.forEach(booking => { %>
+    <% if (bookings.length === 0) { %>
 
-            <tr>
+        <div class="alert alert-info text-center">
+            No payment records found.
+        </div>
 
-                <td><%= booking.user.username %></td>
+    <% } else { %>
 
-                <td><%= booking.listing.title %></td>
+    <div class="table-responsive">
 
-                <td>₹<%= booking.totalPrice %></td>
+        <table class="table table-hover align-middle">
 
-                <td><%= booking.paymentId || "-" %></td>
+            <thead class="table-dark">
 
-                <td><%= booking.orderId || "-" %></td>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Listing</th>
+                    <th>Amount</th>
+                    <th>Payment ID</th>
+                    <th>Order ID</th>
+                    <th>Payment Status</th>
+                    <th>Refund Status</th>
+                    <th>Date</th>
+                </tr>
 
-                <td>
-                    <% if(booking.paymentStatus==="Paid"){ %>
+            </thead>
 
-                        <span class="badge bg-success">
-                            Paid
-                        </span>
+            <tbody>
 
-                    <% } else { %>
+                <% bookings.forEach((booking,index)=>{ %>
 
-                        <span class="badge bg-warning text-dark">
-                            Pending
-                        </span>
+                <tr>
 
-                    <% } %>
-                </td>
+                    <td><%= index + 1 %></td>
 
-                <td>
+                    <td><%= booking.user?.username || "Deleted User" %></td>
 
-                    <% if(booking.refundStatus==="Refunded"){ %>
+                    <td><%= booking.listing?.title || "Deleted Listing" %></td>
 
-                        <span class="badge bg-info">
-                            Refunded
-                        </span>
+                    <td class="fw-bold">
+                        ₹ <%= (booking.totalPrice || 0).toLocaleString("en-IN") %>
+                    </td>
 
-                    <% } else { %>
+                    <td>
+                        <small><%= booking.paymentId || "-" %></small>
+                    </td>
 
-                        <span class="badge bg-secondary">
-                            Not Refunded
-                        </span>
+                    <td>
+                        <small><%= booking.orderId || "-" %></small>
+                    </td>
 
-                    <% } %>
+                    <td>
+                        <% if (booking.paymentStatus === "Paid") { %>
+                            <span class="badge bg-success">Paid</span>
+                        <% } else { %>
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        <% } %>
+                    </td>
 
-                </td>
+                    <td>
+                        <% if (booking.refundStatus === "Refunded") { %>
+                            <span class="badge bg-info text-dark">Refunded</span>
+                        <% } else { %>
+                            <span class="badge bg-secondary">Not Refunded</span>
+                        <% } %>
+                    </td>
 
-                <td>
-                    <%= booking.createdAt.toDateString() %>
-                </td>
+                    <td>
+                        <%= booking.createdAt.toLocaleDateString("en-IN") %>
+                    </td>
 
-            </tr>
+                </tr>
 
-            <% }) %>
+                <% }) %>
 
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
+
+    </div>
+
+    <% } %>
 
 </div>

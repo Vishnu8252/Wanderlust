@@ -1,57 +1,134 @@
 <% layout("/layouts/admin") %>
 
-<div class="container mt-4">
+<div class="container my-5">
 
-<h2>All Bookings</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<table class="table table-bordered table-hover">
+        <h2 class="fw-bold">
+            📅 Booking Management
+        </h2>
 
-<thead>
+        <span class="badge bg-dark fs-6">
+            Total Bookings: <%= bookings.length %>
+        </span>
 
-<tr>
-<th>User</th>
-<th>Listing</th>
-<th>Check In</th>
-<th>Check Out</th>
-<th>Guests</th>
-<th>Total Price</th>
-<th>Status</th>
-</tr>
+    </div>
 
-</thead>
+    <% if(bookings.length === 0){ %>
 
-<tbody>
+        <div class="alert alert-info text-center">
 
-<% bookings.forEach(booking => { %>
+            No bookings found.
 
-<tr>
+        </div>
 
-<td><%= booking.user.username %></td>
-
-<td><%= booking.listing.title %></td>
-
-<td><%= booking.checkIn.toDateString() %></td>
-
-<td><%= booking.checkOut.toDateString() %></td>
-
-<td><%= booking.guests %></td>
-
-<td>₹<%= booking.totalPrice %></td>
-
-<td>
-    <% if(booking.status==="Confirmed"){ %>
-        <span class="badge bg-success">Confirmed</span>
     <% } else { %>
-        <span class="badge bg-danger">Cancelled</span>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Listing</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Guests</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <% bookings.forEach((booking,index)=>{ %>
+
+                <tr>
+
+                    <td>
+
+                        <%= index + 1 %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.user?.username || "Deleted User" %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.listing?.title || "Deleted Listing" %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.checkIn.toLocaleDateString("en-IN") %>
+
+                    </td>
+
+                    <td>
+
+                        <%= booking.checkOut.toLocaleDateString("en-IN") %>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            <%= booking.guests %>
+
+                        </span>
+
+                    </td>
+
+                    <td class="fw-bold">
+
+                        ₹ <%= booking.totalPrice.toLocaleString("en-IN") %>
+
+                    </td>
+
+                    <td>
+
+                        <% if(booking.status === "Confirmed"){ %>
+
+                            <span class="badge bg-success">
+
+                                Confirmed
+
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-danger">
+
+                                Cancelled
+
+                            </span>
+
+                        <% } %>
+
+                    </td>
+
+                </tr>
+
+                <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
     <% } %>
-</td>
-
-</tr>
-
-<% }) %>
-
-</tbody>
-
-</table>
 
 </div>

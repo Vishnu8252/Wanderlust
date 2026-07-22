@@ -1,254 +1,454 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
-    <div class="col-8 offset-2">
+<div class="container my-4">
 
-        <h3><%= listing.title %></h3>
+    <div class="row justify-content-center">
 
-        <div class="card col-6 offset-3 show-card listing-card">
+        <div class="col-lg-10">
 
-            <img
-                src="<%= listing.image.url %>"
-                class="card-img-top show-img"
-                alt="listing_image"
-            >
+            <h2 class="fw-bold mb-3">
+                <%= listing.title %>
+            </h2>
 
-            <div class="card-body">
+            <div class="card shadow-sm border-0 show-card">
 
-                <p class="card-text">
-                    <i>Owned By <%= listing.owner.username %></i>
-                </p>
+                <img
+                    src="<%= listing.image.url %>"
+                    alt="<%= listing.title %>"
+                    class="card-img-top show-img"
+                    loading="lazy"
+                >
 
-                <p class="card-text">
-                    <%= listing.description %>
-                </p>
+                <div class="card-body">
 
-                <p class="card-text">
-                    &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
-                </p>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
 
-                <p class="card-text">
-                    <%= listing.location %>,
-                    <%= listing.country %>
-                </p>
+                        <div>
 
-                <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+                            <h5 class="mb-1">
+                                Hosted by
+                                <strong>
+                                    <%= listing.owner.username %>
+                                </strong>
+                            </h5>
 
-                    <a
-                        href="/listings/<%= listing._id %>/edit"
-                        class="btn btn-dark"
-                    >
-                        Edit
-                    </a>
+                            <small class="text-muted">
+                                <%= listing.location %>,
+                                <%= listing.country %>
+                            </small>
 
-                    <form
-                        method="POST"
-                        action="/listings/<%= listing._id %>?_method=DELETE"
-                        class="d-inline"
-                    >
-                        <button class="btn btn-dark">
-                            Delete
-                        </button>
-                    </form>
+                        </div>
 
-                <% } %>
+                        <% if(currUser){ %>
 
-                <% if(currUser){ %>
+                            <form
+                                action="/wishlist/<%= listing._id %>"
+                                method="POST"
+                                class="mt-2 mt-md-0"
+                            >
 
-                    <form
-                        method="POST"
-                        action="/wishlist/<%= listing._id %>"
-                        class="d-inline ms-2"
-                    >
-                    
-                        <% if(isWishlisted){ %>
-                    
-                            <button class="btn btn-danger">
-                                ❤️ Wishlisted
-                            </button>
-                    
-                        <% } else { %>
-                    
-                            <button class="btn btn-outline-danger">
-                                🤍 Wishlist
-                            </button>
-                    
+                                <% if(isWishlisted){ %>
+
+                                    <button
+                                        class="btn btn-danger"
+                                        type="submit"
+                                    >
+                                        ❤️ Wishlisted
+                                    </button>
+
+                                <% } else { %>
+
+                                    <button
+                                        class="btn btn-outline-danger"
+                                        type="submit"
+                                    >
+                                        🤍 Wishlist
+                                    </button>
+
+                                <% } %>
+
+                            </form>
+
                         <% } %>
-                    
-                    </form>
-                    
+
+                    </div>
+
+                    <hr>
+
+                    <p class="card-text">
+
+                        <%= listing.description %>
+
+                    </p>
+
+                    <h4 class="fw-bold mt-4">
+
+                        ₹
+                        <%= listing.price.toLocaleString("en-IN") %>
+
+                        <small class="text-muted fs-6">
+                            / night
+                        </small>
+
+                    </h4>
+
+                    <% if(
+                        currUser &&
+                        listing.owner._id.equals(currUser._id)
+                    ){ %>
+
+                        <hr>
+
+                        <div class="d-flex gap-2">
+
+                            <a
+                                href="/listings/<%= listing._id %>/edit"
+                                class="btn btn-dark"
+                            >
+                                Edit Listing
+                            </a>
+
+                            <form
+                                action="/listings/<%= listing._id %>?_method=DELETE"
+                                method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this listing?');"
+                            >
+
+                                <button
+                                    class="btn btn-outline-danger"
+                                >
+                                    Delete Listing
+                                </button>
+
+                            </form>
+
+                        </div>
+
                     <% } %>
 
-                    <% if(currUser){ %>
-
-                        <hr>
-
-                        
-                        <h4>Book this Stay</h4>
-                        <script>
-                            const bookedDates = <%- JSON.stringify(bookings) %>;
-                            </script>
-                       
-                       <form
-                         id="booking-form"
-                        action="/listings/<%= listing._id %>/bookings"
-                        method="POST"
-                            >
-                        
-                            <div class="mb-3">
-                        
-                                <label class="form-label">
-                                    Check-In
-                                </label>
-                        
-                                <input
-                                    type="text"
-                                    name="checkIn"
-                                    id="checkIn"
-                                    class="form-control"
-                                    required
-                                >
-                        
-                            </div>
-                        
-                            <div class="mb-3">
-                        
-                                <label class="form-label">
-                                    Check-Out
-                                </label>
-                        
-                                <input
-                                    type="text"
-                                    name="checkOut"
-                                    
-                                    id="checkOut"
-                                    class="form-control"
-                                    required
-                                >
-                        
-                            </div>
-                        
-                            <div class="mb-3">
-                        
-                                <label class="form-label">
-                                    Guests
-                                </label>
-                        
-                                <input
-                                    type="number"
-                                    name="guests"
-                                    min="1"
-                                    value="1"
-                                    class="form-control"
-                                >
-                        
-                            </div>
-                            <input
-                            type="hidden"
-                            id="listingId"
-                            value="<%= listing._id %>"
-                        >
-                        <input
-                        type="hidden"
-                        id="pricePerNight"
-                        value="<%= listing.price %>"
-                    >
-                             
-                        
-                            <button
-                            type="button"
-                            id="pay-btn"
-                            class="btn btn-danger"
-                        >
-                            Pay & Book
-                        </button>
-                        
-                        </form>
-                        
-                        <hr>
-                        
-                        <% } %>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="map"></div>
-
-<!-- Review Form -->
-
-<% if(currUser){ %>
-
-<div class="row mt-5">
-
-    <div class="col-8 offset-2">
-
-        <hr>
-
-        <h4>Leave a Review</h4>
-
-        <form
-            method="POST"
-            action="/listings/<%= listing._id %>/reviews"
-            novalidate
-            class="needs-validation"
-        >
-
-            <fieldset class="starability-slot">
-
-                <legend>Rating</legend>
-
-                <input type="radio" id="rate1" name="review[rating]" value="1" checked>
-<label for="rate1" title="Poor">1 star</label>
-
-<input type="radio" id="rate2" name="review[rating]" value="2">
-<label for="rate2" title="Fair">2 stars</label>
-
-<input type="radio" id="rate3" name="review[rating]" value="3">
-<label for="rate3" title="Average">3 stars</label>
-
-<input type="radio" id="rate4" name="review[rating]" value="4">
-<label for="rate4" title="Very Good">4 stars</label>
-
-<input type="radio" id="rate5" name="review[rating]" value="5">
-<label for="rate5" title="Amazing">5 stars</label>
-
-                <span class="starability-focus-ring"></span>
-
-            </fieldset>
-
-            <br>
-
-            <div class="mb-3">
-
-                <label for="comment" class="form-label">
-                    Comments
-                </label>
-
-                <textarea
-                    name="review[comment]"
-                    id="comment"
-                    cols="30"
-                    rows="5"
-                    class="form-control"
-                    required
-                ></textarea>
-
-                <div class="invalid-feedback">
-                    Please add some comments.
                 </div>
 
             </div>
 
-            <button class="btn btn-outline-dark">
-                Submit
-            </button>
+        </div>
 
-        </form>
+    </div>
 
-        <hr>
+</div>
+<% if (currUser) { %>
+
+<hr class="my-4">
+
+<div class="booking-section">
+
+    <h3 class="mb-4">
+        Book This Stay
+    </h3>
+
+    <script>
+        const bookedDates = <%- JSON.stringify(bookings || []) %>;
+    </script>
+
+    <form
+        id="booking-form"
+        action="/listings/<%= listing._id %>/bookings"
+        method="POST"
+        class="needs-validation"
+        novalidate
+    >
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label
+                    for="checkIn"
+                    class="form-label"
+                >
+                    Check-In
+                </label>
+
+                <input
+                    type="text"
+                    id="checkIn"
+                    name="checkIn"
+                    class="form-control"
+                    placeholder="Select check-in date"
+                    autocomplete="off"
+                    required
+                >
+
+                <div class="invalid-feedback">
+                    Please select your check-in date.
+                </div>
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+                <label
+                    for="checkOut"
+                    class="form-label"
+                >
+                    Check-Out
+                </label>
+
+                <input
+                    type="text"
+                    id="checkOut"
+                    name="checkOut"
+                    class="form-control"
+                    placeholder="Select check-out date"
+                    autocomplete="off"
+                    required
+                >
+
+                <div class="invalid-feedback">
+                    Please select your check-out date.
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label
+                for="guests"
+                class="form-label"
+            >
+                Guests
+            </label>
+
+            <input
+                type="number"
+                id="guests"
+                name="guests"
+                class="form-control"
+                min="1"
+                max="10"
+                value="1"
+                required
+            >
+
+            <div class="invalid-feedback">
+                Number of guests must be between 1 and 10.
+            </div>
+
+        </div>
+
+        <input
+            type="hidden"
+            id="listingId"
+            value="<%= listing._id %>"
+        >
+
+        <input
+            type="hidden"
+            id="pricePerNight"
+            value="<%= listing.price %>"
+        >
+
+        <!-- Booking Summary -->
+
+        <div
+            class="card bg-light border-0 mb-4"
+            id="bookingSummary"
+        >
+
+            <div class="card-body">
+
+                <h5 class="card-title mb-3">
+                    Booking Summary
+                </h5>
+
+                <div
+                    class="d-flex justify-content-between"
+                >
+                    <span>
+                        Price / Night
+                    </span>
+
+                    <span>
+
+                        ₹
+                        <%= listing.price.toLocaleString("en-IN") %>
+
+                    </span>
+
+                </div>
+
+                <div
+                    class="d-flex justify-content-between mt-2"
+                >
+
+                    <span>
+                        Nights
+                    </span>
+
+                    <span id="totalNights">
+                        0
+                    </span>
+
+                </div>
+
+                <hr>
+
+                <div
+                    class="d-flex justify-content-between fw-bold"
+                >
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span id="totalPrice">
+                        ₹0
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            id="pay-btn"
+            class="btn btn-danger btn-lg w-100"
+        >
+
+            <i class="fa-solid fa-credit-card"></i>
+
+            Pay & Book
+
+        </button>
+
+    </form>
+
+</div>
+
+<% } %>
+<!-- ================= REVIEW SECTION ================= -->
+
+<% if (currUser) { %>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <hr>
+
+            <h3 class="mb-4">
+                Leave a Review
+            </h3>
+
+            <form
+                method="POST"
+                action="/listings/<%= listing._id %>/reviews"
+                class="needs-validation"
+                novalidate
+            >
+
+                <fieldset class="starability-slot mb-4">
+
+                    <legend class="mb-3">
+                        Rating
+                    </legend>
+
+                    <input
+                        type="radio"
+                        id="rate1"
+                        name="review[rating]"
+                        value="1"
+                        checked
+                    >
+                    <label for="rate1" title="Poor">
+                        1 Star
+                    </label>
+
+                    <input
+                        type="radio"
+                        id="rate2"
+                        name="review[rating]"
+                        value="2"
+                    >
+                    <label for="rate2" title="Fair">
+                        2 Stars
+                    </label>
+
+                    <input
+                        type="radio"
+                        id="rate3"
+                        name="review[rating]"
+                        value="3"
+                    >
+                    <label for="rate3" title="Average">
+                        3 Stars
+                    </label>
+
+                    <input
+                        type="radio"
+                        id="rate4"
+                        name="review[rating]"
+                        value="4"
+                    >
+                    <label for="rate4" title="Very Good">
+                        4 Stars
+                    </label>
+
+                    <input
+                        type="radio"
+                        id="rate5"
+                        name="review[rating]"
+                        value="5"
+                    >
+                    <label for="rate5" title="Amazing">
+                        5 Stars
+                    </label>
+
+                    <span class="starability-focus-ring"></span>
+
+                </fieldset>
+
+                <div class="mb-3">
+
+                    <label
+                        for="comment"
+                        class="form-label"
+                    >
+                        Your Review
+                    </label>
+
+                    <textarea
+                        id="comment"
+                        name="review[comment]"
+                        rows="5"
+                        class="form-control"
+                        placeholder="Share your experience..."
+                        required
+                    ></textarea>
+
+                    <div class="invalid-feedback">
+                        Please enter your review.
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-dark"
+                    type="submit"
+                >
+                    Submit Review
+                </button>
+
+            </form>
+
+            <hr class="mt-5">
+
+        </div>
 
     </div>
 
@@ -256,59 +456,108 @@
 
 <% } %>
 
-<!-- Reviews -->
 
-<div class="row">
+<!-- ================= ALL REVIEWS ================= -->
 
-    <div class="col-8 offset-2">
+<div class="container mb-5">
 
-        <h4>All Reviews</h4>
+    <div class="row justify-content-center">
 
-        <div class="row">
+        <div class="col-lg-10">
 
-            <% for(let review of listing.reviews){ %>
+            <h3 class="mb-4">
 
-            <div class="card col-5 ms-3 mb-3 review-card">
+                Reviews
 
-                <div class="card-body">
+                <span class="text-muted">
 
-                    <h5 class="card-title">
-                        @<%= review.author.username %>
-                    </h5>
+                    (<%= listing.reviews.length %>)
 
-                    <p
-                        class="starability-result"
-                        data-rating="<%= review.rating %>"
-                    >
-                        Rated:
-                        <%= review.rating %>
+                </span>
+
+            </h3>
+
+            <% if (listing.reviews.length === 0) { %>
+
+                <div class="alert alert-light border">
+
+                    <p class="mb-0 text-muted">
+
+                        No reviews yet.
+
+                        Be the first to review this stay!
+
                     </p>
 
-                    <p class="card-text">
-                        <%= review.comment %>
-                    </p>
+                </div>
 
-                    <% if(currUser &&
-                    review.author._id.equals(currUser._id)){ %>
+            <% } else { %>
 
-                    <form
-                        method="POST"
-                        action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                    >
+                <div class="row">
 
-                        <button
-                            class="btn btn-sm btn-dark"
-                        >
-                            Delete
-                        </button>
+                    <% for (let review of listing.reviews) { %>
 
-                    </form>
+                    <div class="col-md-6 mb-4">
+
+                        <div class="card shadow-sm review-card h-100">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                    <h5 class="mb-0">
+
+                                        @<%= review.author ? review.author.username : "Deleted User" %>
+
+                                    </h5>
+
+                                    <span
+                                        class="starability-result"
+                                        data-rating="<%= review.rating %>"
+                                    >
+                                        Rated:
+                                        <%= review.rating %>
+                                    </span>
+
+                                </div>
+
+                                <p class="card-text">
+
+                                    <%= review.comment %>
+
+                                </p>
+
+                                <% if (
+                                    currUser &&
+                                    review.author &&
+                                    review.author._id.equals(currUser._id)
+                                ) { %>
+
+                                    <form
+                                        method="POST"
+                                        action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                        onsubmit="return confirm('Delete this review?');"
+                                    >
+
+                                        <button
+                                            class="btn btn-sm btn-outline-danger"
+                                        >
+                                            Delete Review
+                                        </button>
+
+                                    </form>
+
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                     <% } %>
 
                 </div>
-
-            </div>
 
             <% } %>
 
@@ -317,11 +566,182 @@
     </div>
 
 </div>
+<!-- ================= MAP ================= -->
+
+<div class="container mt-5 mb-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <h3 class="mb-3">
+                Location
+            </h3>
+
+            <div
+                id="map"
+                class="rounded shadow-sm"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= DATA FOR JAVASCRIPT ================= -->
 
 <script>
-    const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
-    const listingTitle = "<%= listing.title %>";
+
+const coordinates =
+<%- JSON.stringify(
+    listing.geometry?.coordinates || [77.4126, 23.2599]
+) %>;
+
+const listingTitle =
+<%- JSON.stringify(listing.title) %>;
+
 </script>
+
+<!-- ================= RAZORPAY ================= -->
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- ================= PAYMENT ================= -->
+
 <script src="/js/payment.js"></script>
 
+<!-- ================= BOOTSTRAP VALIDATION ================= -->
+
+<script>
+
+(() => {
+
+    "use strict";
+
+    const forms =
+        document.querySelectorAll(".needs-validation");
+
+    Array.from(forms).forEach((form) => {
+
+        form.addEventListener("submit", (event) => {
+
+            if (!form.checkValidity()) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+            }
+
+            form.classList.add("was-validated");
+
+        });
+
+    });
+
+})();
+
+</script>
+
+<!-- ================= TAX DISPLAY ================= -->
+
+<script>
+
+const taxInfo =
+document.querySelector(".tax-info");
+
+if (taxInfo) {
+
+    taxInfo.style.display = "none";
+
+}
+
+</script>
+
+<!-- ================= BOOKING SUMMARY ================= -->
+
+<script>
+
+const checkIn =
+document.querySelector("#checkIn");
+
+const checkOut =
+document.querySelector("#checkOut");
+
+const nightsElement =
+document.querySelector("#totalNights");
+
+const totalPriceElement =
+document.querySelector("#totalPrice");
+
+const pricePerNight =
+Number(
+document.querySelector("#pricePerNight")?.value || 0
+);
+
+function updateBookingSummary() {
+
+    if (!checkIn || !checkOut) return;
+
+    if (!checkIn.value || !checkOut.value) {
+
+        nightsElement.textContent = "0";
+        totalPriceElement.textContent = "₹0";
+
+        return;
+
+    }
+
+    const start =
+    new Date(checkIn.value);
+
+    const end =
+    new Date(checkOut.value);
+
+    const difference =
+    end - start;
+
+    const nights =
+    Math.ceil(
+        difference / (1000 * 60 * 60 * 24)
+    );
+
+    if (nights > 0) {
+
+        nightsElement.textContent =
+        nights;
+
+        totalPriceElement.textContent =
+        "₹" +
+        (nights * pricePerNight)
+        .toLocaleString("en-IN");
+
+    } else {
+
+        nightsElement.textContent = "0";
+
+        totalPriceElement.textContent = "₹0";
+
+    }
+
+}
+
+if (checkIn && checkOut) {
+
+    checkIn.addEventListener(
+        "change",
+        updateBookingSummary
+    );
+
+    checkOut.addEventListener(
+        "change",
+        updateBookingSummary
+    );
+
+}
+
+</script>
+
+<!-- ================= LEAFLET MAP ================= -->
+
+<script src="/js/map.js"></script>

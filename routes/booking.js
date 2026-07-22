@@ -1,35 +1,61 @@
 const express = require("express");
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 
-const { isLoggedIn } = require("../middleware");
+const wrapAsync = require("../utils/wrapAsync");
 const bookingController = require("../controllers/bookings");
+const { isLoggedIn } = require("../middleware");
+
+// ===============================
+// Booking Form
+// ===============================
 router.get(
-    "/",
+    "/:listingId/book",
     isLoggedIn,
-    bookingController.myBookings
-);
-router.post(
-    "/",
-    isLoggedIn,
-    bookingController.createBooking
+    wrapAsync(bookingController.renderBookingForm)
 );
 
-router.delete(
-    "/:id",
-    isLoggedIn,
-    bookingController.cancelBooking
-);
-
+// ===============================
+// Create Razorpay Order
+// ===============================
 router.post(
     "/create-order",
     isLoggedIn,
-    bookingController.createOrder
+    wrapAsync(bookingController.createOrder)
 );
 
+// ===============================
+// Verify Payment
+// ===============================
 router.post(
     "/verify-payment",
     isLoggedIn,
-    bookingController.verifyPayment
+    wrapAsync(bookingController.verifyPayment)
+);
+// ===============================
+// User Bookings
+// Supports both:
+// /bookings
+// /bookings/my
+// ===============================
+router.get(
+    "/",
+    isLoggedIn,
+    wrapAsync(bookingController.myBookings)
+);
+
+router.get(
+    "/my",
+    isLoggedIn,
+    wrapAsync(bookingController.myBookings)
+);
+
+// ===============================
+// Cancel Booking
+// ===============================
+router.delete(
+    "/:id",
+    isLoggedIn,
+    wrapAsync(bookingController.cancelBooking)
 );
 
 module.exports = router;

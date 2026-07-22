@@ -1,63 +1,140 @@
 <% layout("/layouts/admin") %>
 
-<h2 class="mb-4">⭐ Review Management</h2>
+<div class="container my-5">
 
-<table class="table table-bordered">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<thead>
-<tr>
-<th>#</th>
-<th>Listing</th>
-<th>User</th>
-<th>Rating</th>
-<th>Comment</th>
-<th>Action</th>
-</tr>
-</thead>
+        <h2 class="fw-bold">
+            ⭐ Review Management
+        </h2>
 
-<tbody>
+        <span class="badge bg-dark fs-6">
+            Total Reviews:
+            <%= listings.reduce((total, listing) => total + listing.reviews.length, 0) %>
+        </span>
 
-<%
-let count = 1;
-listings.forEach(listing => {
-    listing.reviews.forEach(review => {
-%>
+    </div>
 
-<tr>
+    <%
+        const totalReviews = listings.reduce(
+            (total, listing) => total + listing.reviews.length,
+            0
+        );
+    %>
 
-<td><%= count++ %></td>
+    <% if(totalReviews === 0){ %>
 
-<td><%= listing.title %></td>
+        <div class="alert alert-info text-center">
 
-<td><%= review.author ? review.author.username : "Unknown" %></td>
+            No reviews found.
 
-<td>⭐ <%= review.rating %></td>
+        </div>
 
-<td><%= review.comment %></td>
+    <% } else { %>
 
-<td>
+    <div class="table-responsive">
 
-<form
-action="/admin/reviews/<%= review._id %>?_method=DELETE"
-method="POST"
-onsubmit="return confirm('Delete this review?')"
->
+        <table class="table table-hover align-middle">
 
-<button class="btn btn-danger btn-sm">
-Delete
-</button>
+            <thead class="table-dark">
 
-</form>
+                <tr>
 
-</td>
+                    <th>#</th>
+                    <th>Listing</th>
+                    <th>User</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th class="text-center">
+                        Action
+                    </th>
 
-</tr>
+                </tr>
 
-<%
-    });
-});
-%>
+            </thead>
 
-</tbody>
+            <tbody>
 
-</table>
+                <%
+                    let count = 1;
+
+                    listings.forEach(listing => {
+
+                        listing.reviews.forEach(review => {
+                %>
+
+                <tr>
+
+                    <td>
+
+                        <%= count++ %>
+
+                    </td>
+
+                    <td class="fw-semibold">
+
+                        <%= listing.title %>
+
+                    </td>
+
+                    <td>
+
+                        <%= review.author?.username || "Unknown User" %>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-warning text-dark">
+
+                            ⭐ <%= review.rating %>/5
+
+                        </span>
+
+                    </td>
+
+                    <td style="max-width:300px;">
+
+                        <%= review.comment %>
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <form
+                            action="/admin/reviews/<%= review._id %>?_method=DELETE"
+                            method="POST"
+                            onsubmit="return confirm('Delete this review permanently?');"
+                        >
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                            >
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <%
+                        });
+
+                    });
+                %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <% } %>
+
+</div>

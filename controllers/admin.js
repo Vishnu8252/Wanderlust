@@ -9,11 +9,12 @@ module.exports.dashboard = async (req, res) => {
     const totalUsers = await User.countDocuments();
     const totalListings = await Listing.countDocuments();
     const totalReviews = await Review.countDocuments();
-
+    const totalBookings = await Booking.countDocuments();
     res.render("admin/dashboard", {
         totalUsers,
         totalListings,
         totalReviews,
+        totalBookings,
     });
 };
 
@@ -58,7 +59,10 @@ module.exports.toggleBan = async (req, res) => {
     const { id } = req.params;
 
     const user = await User.findById(id);
-
+    if (!user) {
+        req.flash("error", "User not found.");
+        return res.redirect("/admin/users");
+    }
     if (user.isAdmin) {
         req.flash("error", "Admin cannot be banned.");
         return res.redirect("/admin/users");
@@ -121,7 +125,14 @@ module.exports.deleteListing = async (req, res) => {
 
     const { id } = req.params;
 
-    await Listing.findByIdAndDelete(id);
+    const listing = await Listing.findById(id);
+
+if (!listing) {
+    req.flash("error", "Listing not found.");
+    return res.redirect("/admin/listings");
+}
+
+await Listing.findByIdAndDelete(id);
 
     req.flash("success", "Listing Deleted Successfully!");
 
@@ -213,7 +224,6 @@ module.exports.allBookings = async (req, res) => {
             .populate("listing")
             .sort({ createdAt: -1 });
 
-        console.log("Bookings:", bookings.length);
 
         res.render("admin/bookings", { bookings });
 
@@ -227,10 +237,26 @@ module.exports.allBookings = async (req, res) => {
 };
 
 module.exports.allPayments = async (req, res) => {
-    const bookings = await Booking.find({})
-        .populate("user")
-        .populate("listing")
-        .sort({ createdAt: -1 });
 
-    res.render("admin/payments", { bookings });
+    try {
+
+        const bookings = await Booking.find({})
+            .populate("user")
+            .populate("listing")
+            .sort({ createdAt: -1 });
+
+        res.render("admin/payments", {
+            bookings,
+        });
+
+    } catch (err) {
+
+        console.error(err.message);
+
+        req.flash("error", "Unable to load payments.");
+
+        res.redirect("/admin");
+
+    }
+
 };

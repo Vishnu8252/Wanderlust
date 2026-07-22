@@ -13,7 +13,9 @@ const {
 const reviewController = require("../controllers/reviews");
 
 const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
+    const { error } = reviewSchema.validate(req.body, {
+        abortEarly: false,
+    });
 
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");

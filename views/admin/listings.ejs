@@ -1,112 +1,218 @@
 <% layout("/layouts/admin") %>
 
+<div class="container my-5">
 
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-<div class="top-bar">
+        <h2 class="fw-bold">
+            🏠 Listing Management
+        </h2>
 
-    <h2>🏠 Listing Management</h2>
+        <span class="badge bg-dark fs-6">
+            Total Listings: <%= listings.length %>
+        </span>
 
-    <form action="/admin/listings" method="GET" class="search-box">
+    </div>
 
-        <input
-            type="text"
-            name="search"
-            value="<%= search %>"
-            placeholder="Search listings..."
-        >
+    <!-- Search -->
 
-        <button type="submit">
-            🔍
-        </button>
-
-    </form>
-
-</div>
-
-<table class="table table-bordered table-hover align-middle">
-
-<thead class="table-dark">
-
-<tr>
-
-<th>#</th>
-<th>Image</th>
-<th>Title</th>
-<th>Owner</th>
-<th>Category</th>
-<th>Price</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-<% listings.forEach((listing,index)=>{ %>
-
-<tr>
-
-<td><%= index+1 %></td>
-
-<td>
-
-<img
-src="<%= listing.image.url %>"
-width="90"
-height="70"
-style="object-fit:cover;border-radius:8px;"
->
-
-</td>
-
-<td><%= listing.title %></td>
-
-<td>
-
-<%= listing.owner ? listing.owner.username : "No Owner" %>
-
-</td>
-
-<td><%= listing.category %></td>
-
-<td>₹ <%= listing.price %></td>
-
-<td>
-
-<a
-href="/listings/<%= listing._id %>"
-class="btn btn-primary btn-sm"
->
-View
-</a>
-<form
-        action="/admin/listings/<%= listing._id %>?_method=DELETE"
-        method="POST"
-        style="display:inline;"
-        onsubmit="return confirm('Delete this listing?')"
+    <form
+        action="/admin/listings"
+        method="GET"
+        class="mb-4"
     >
 
-        <button class="btn btn-danger btn-sm">
-            Delete
-        </button>
+        <div class="input-group">
+
+            <input
+                type="search"
+                name="search"
+                class="form-control"
+                placeholder="Search by title, owner or category..."
+                value="<%= search || '' %>"
+                autocomplete="off"
+            >
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Search
+
+            </button>
+
+            <% if(search){ %>
+
+                <a
+                    href="/admin/listings"
+                    class="btn btn-outline-secondary"
+                >
+
+                    Clear
+
+                </a>
+
+            <% } %>
+
+        </div>
 
     </form>
-    <a
-    href="/admin/listings/<%= listing._id %>/edit"
-    class="btn btn-warning btn-sm"
->
-    Edit
-</a>
 
+    <% if(listings.length === 0){ %>
 
-</td>
+        <div class="alert alert-info text-center">
 
-</tr>
+            No listings found.
 
+        </div>
 
-<% }) %>
+    <% } else { %>
 
-</tbody>
+    <div class="table-responsive">
 
-</table>
+        <table class="table table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Image</th>
+
+                    <th>Title</th>
+
+                    <th>Owner</th>
+
+                    <th>Category</th>
+
+                    <th>Price</th>
+
+                    <th class="text-center">
+
+                        Actions
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <% listings.forEach((listing,index)=>{ %>
+
+                <tr>
+
+                    <td>
+
+                        <%= index + 1 %>
+
+                    </td>
+
+                    <td>
+
+                        <img
+                            src="<%= listing.image?.url || '/images/default-listing.jpg' %>"
+                            alt="<%= listing.title %>"
+                            width="90"
+                            height="70"
+                            loading="lazy"
+                            class="rounded"
+                            style="object-fit:cover;"
+                        >
+
+                    </td>
+
+                    <td class="fw-semibold">
+
+                        <%= listing.title %>
+
+                    </td>
+
+                    <td>
+
+                        <%= listing.owner?.username || "No Owner" %>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            <%= listing.category %>
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        ₹ <%= listing.price.toLocaleString("en-IN") %>
+
+                    </td>
+
+                    <td>
+
+                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+
+                            <a
+                                href="/listings/<%= listing._id %>"
+                                class="btn btn-primary btn-sm"
+                            >
+
+                                <i class="fa-solid fa-eye"></i>
+
+                                View
+
+                            </a>
+
+                            <a
+                                href="/admin/listings/<%= listing._id %>/edit"
+                                class="btn btn-warning btn-sm"
+                            >
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                Edit
+
+                            </a>
+
+                            <form
+                                action="/admin/listings/<%= listing._id %>?_method=DELETE"
+                                method="POST"
+                                onsubmit="return confirm('Delete this listing permanently?');"
+                            >
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                >
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <% } %>
+
+</div>

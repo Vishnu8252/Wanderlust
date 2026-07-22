@@ -1,315 +1,1478 @@
- body {
-   font-family: "Plus Jakarta Sans",sans-serif !important;
-   display: flex;
-   flex-direction: column;
-   min-height: 100vh;
-} 
+/* ==========================================
+   GOOGLE FONT
+========================================== */
+
+body{
+    font-family:"Plus Jakarta Sans",sans-serif;
+    background:#fff;
+    color:#222;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+:root{
+
+    --primary:#fe424d;
+    --primary-dark:#e63946;
+
+    --text:#222;
+
+    --light:#f8f9fa;
+
+    --border:#e5e5e5;
+
+    --shadow:0 6px 18px rgba(0,0,0,.08);
+
+    --radius:18px;
+
+}
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
 .container{
-    flex: 1;
-}
-/* Navbar */
-.navbar {
-    height: 5rem;
-    background-color: white;
+
+    flex:1;
+
 }
 
-.fa-compass {
-    color: #fe424d;
-    font-size: 2rem;
+img{
+
+    max-width:100%;
+
+    display:block;
+
 }
 
-.nav-link {
-    color: #222222 !important;
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.navbar{
+
+    height:5rem;
+
+    background:#fff;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
 }
 
-/* Footer */
+.fa-compass{
 
-.f-info-links a {
-    text-decoration: none;
-    color: #222222;
+    color:var(--primary);
+
+    font-size:2rem;
+
 }
 
-.f-info-links a:hover {
-    text-decoration: underline;
+.nav-link{
+
+    color:var(--text)!important;
+
+    font-weight:500;
+
+    transition:.3s ease;
+
+}
+
+.nav-link:hover{
+
+    color:var(--primary)!important;
+
+}
+
+/* ==========================================
+   SEARCH BAR
+========================================== */
+
+.search-bar{
+
+    width:100%;
+
+    max-width:420px;
+
+    border:1px solid #ddd;
+
+    border-radius:50px;
+
+    padding:.35rem;
+
+    background:#fff;
+
+    box-shadow:var(--shadow);
+
+}
+
+.search-input{
+
+    border:none!important;
+
+    box-shadow:none!important;
+
+    border-radius:50px;
+
+}
+
+.search-input:focus{
+
+    box-shadow:none!important;
+
+}
+
+.search-btn{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    transition:.3s;
+
+}
+
+.search-btn:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.btn{
+
+    transition:.3s ease;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.add-btn,
+
+.edit-btn{
+
+    background:var(--primary)!important;
+
+    border:none!important;
+
+}
+
+.add-btn:hover,
+
+.edit-btn:hover{
+
+    background:var(--primary-dark)!important;
+
+}
+
+/* ==========================================
+   LISTING CARDS
+========================================== */
+
+.listing-card{
+
+    border:none!important;
+
+    border-radius:var(--radius);
+
+    overflow:hidden;
+
+    margin-bottom:2rem;
+
+    transition:.3s ease;
+
+}
+
+.listing-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 12px 25px rgba(0,0,0,.15);
+
+}
+
+.card-img-top{
+
+    width:100%!important;
+
+    height:20rem;
+
+    object-fit:cover!important;
+
+}
+
+.card-body{
+
+    padding:1rem!important;
+
+}
+
+.card-title{
+
+    font-weight:700;
+
+}
+
+.card-text{
+
+    font-weight:400;
+
+}
+
+.listing-link{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+/* ==========================================
+   CARD OVERLAY
+========================================== */
+
+.card-img-overlay{
+
+    opacity:0;
+
+    transition:.3s;
+
+}
+
+.card-img-overlay:hover{
+
+    opacity:.15;
+
+    background:#fff;
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.f-info{
+
+    background:#ebebeb;
+
+    padding:2rem 1rem;
+
+    text-align:center;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:1rem;
+
 }
 
 .f-info-links,
 .f-info-socials,
-.f-info-brand {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+.f-info-brand{
 
-.f-info-socials i {
-    font-size: 1.2rem;
-    margin-right: 1rem;
-}
+    width:100%;
 
-.f-info {
-    text-align: center;
-    height: 8rem;
-    background-color: #ebebeb;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: space-evenly;
-}
-
-.listing-card {
-    border: none !important;
-    margin-bottom: 2rem;
-}
-
-.card-img-top {
-    border-radius: 1rem !important;
-    width: 100% !important;
-    height: 20rem;
-    object-fit: cover !important;
-}
-
-.card-body {
-    padding: 0 !important;
-}
-
-.card-text {
-    font-weight: 400;
-}
-
-.listing-link {
-    text-decoration: none;
-}
-
-/* Card Effect */
-.card-img-overlay {
-    opacity: 0;
-}
-
-.card-img-overlay:hover {
-    opacity: 0.2;
-    background-color: white;
-}
-
-
-.add-btn{
-    background-color: #fe424d !important;
-    border: none !important;
-}
-
-.edit-btn{
-    background-color: #fe424d !important;
-    border: none !important;
-}
-#map {
-    height: 400px;
-    width: 70%;
-    margin: 2rem auto;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-    border: 2px solid #f1f1f1;
-}
-#filters{
     display:flex;
+
+    justify-content:center;
+
     align-items:center;
+
+}
+
+.f-info-links{
+
+    gap:1rem;
+
+}
+
+.f-info-links a{
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    transition:.3s;
+
+}
+
+.f-info-links a:hover{
+
+    color:var(--primary);
+
+    text-decoration:underline;
+
+}
+
+.f-info-socials{
+
+    gap:1rem;
+
+}
+
+.f-info-socials i{
+
+    font-size:1.3rem;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+.f-info-socials i:hover{
+
+    color:var(--primary);
+
+    transform:translateY(-3px);
+
+}
+
+.f-info-brand{
+
+    font-weight:500;
+
+}
+
+/* ==========================================
+   FILTER SECTION
+========================================== */
+
+.filters-wrapper{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+    margin:1rem 0;
+
+}
+
+#filters{
+
+    display:flex;
+
+    align-items:center;
+
     gap:2rem;
-    overflow-x:auto;
-    overflow-y:hidden;
-    white-space:nowrap;
+
     flex:1;
-    min-width:0;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    white-space:nowrap;
+
     scrollbar-width:none;
+
+    scroll-behavior:smooth;
+
 }
 
 #filters::-webkit-scrollbar{
-    display: none;
+
+    display:none;
+
 }
 
 .filter{
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    align-items: center;
-    color: #222;
-    opacity: 0.7;
-    cursor: pointer;
-    min-width: 80px;
-    transition: 0.2s;
-    text-align: center;
-}
-.filters-wrapper{
+
+    flex:0 0 auto;
+
     display:flex;
+
+    flex-direction:column;
+
     align-items:center;
-   
-    gap:1rem;
-    margin:1rem 0;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    opacity:.7;
+
+    min-width:80px;
+
+    transition:.3s;
+
 }
 
 .filter:hover{
-    opacity: 1;
-    color: #fe424d;
+
+    opacity:1;
+
+    color:var(--primary);
+
 }
 
 .filter i{
-    font-size: 1.4rem;
-    margin-bottom: 0.4rem;
+
+    font-size:1.4rem;
+
+    margin-bottom:.4rem;
+
 }
 
 .filter p{
-    font-size: 0.85rem;
-    margin: 0;
+
+    margin:0;
+
+    font-size:.85rem;
+
 }
-.tax-info{
-    display: none;
-    color: green;
-    font-weight: 500;
-}
+
+/* ==========================================
+   TAX TOGGLE
+========================================== */
+
 .tax-toggle{
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 2rem;
-    padding: 0.8rem 1rem;
-    height: 3.2rem;
-    display: flex;
-    align-items: center;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    margin-left: 1rem;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
+
+    border:1px solid rgba(0,0,0,.1);
+
+    border-radius:2rem;
+
+    padding:.8rem 1rem;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+    transition:.3s;
+
+    flex-shrink:0;
 
 }
 
 .tax-toggle:hover{
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    transform: translateY(-2px);
+
+    transform:translateY(-2px);
+
 }
 
 .tax-toggle .form-check{
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:.6rem;
+
+    margin:0;
+
 }
 
 .tax-toggle .form-check-input{
-    width: 2.8rem;
-    height: 1.4rem;
-    cursor: pointer;
+
+    width:2.8rem;
+
+    height:1.4rem;
+
+    cursor:pointer;
+
 }
 
 .tax-toggle .form-check-label{
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #444;
-    cursor: pointer;
-}
-.search-bar{
-    width: 420px;
-    border: 1px solid #ddd;
-    border-radius: 50px;
-    padding: 0.3rem;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+
+    cursor:pointer;
+
+    font-weight:500;
+
 }
 
-.search-input{
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: 50px;
+.tax-info{
+
+    display:none;
+
+    color:green;
+
+    font-weight:600;
+
 }
 
-.search-btn{
-    border-radius: 50%;
-    background: #fe424d;
-    color: white;
-    border: none;
-    width: 42px;
-    height: 42px;
+/* ==========================================
+   MAP
+========================================== */
+
+#map{
+
+    width:100%;
+
+    max-width:900px;
+
+    height:420px;
+
+    margin:2rem auto;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:2px solid #f0f0f0;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
 }
 
-.search-btn:hover{
-    background: #e63946;
-    color: white;
-}
+/* ==========================================
+   WISHLIST BUTTON
+========================================== */
+
 .wishlist-form{
+
     position:absolute;
+
     top:12px;
+
     right:15px;
-    z-index:10;
+
+    z-index:5;
+
 }
 
 .wishlist-btn{
+
+    width:42px;
+
+    height:42px;
+
     border:none;
-    background:white;
-    width:40px;
-    height:40px;
+
     border-radius:50%;
-    font-size:22px;
+
+    background:rgba(255,255,255,.95);
+
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+
+    font-size:1.3rem;
+
     cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,.2);
-    transition:.2s;
+
+    transition:.3s;
+
 }
 
 .wishlist-btn:hover{
+
     transform:scale(1.1);
+
 }
 
-.booking-card{
+.wishlist-btn.active{
+
+    color:var(--primary);
+
+}
+
+/* ==========================================
+   FLASH ALERTS
+========================================== */
+
+.alert{
+
     border:none;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================
+   FORM CONTROLS
+========================================== */
+
+.form-control{
+
+    border-radius:12px;
+
+}
+
+.form-control:focus{
+
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 .2rem rgba(254,66,77,.2);
+
+}
+
+textarea{
+
+    resize:none;
+
+}
+
+
+/* ==========================================
+   PROFILE PAGE
+========================================== */
+
+.profile-card{
+
+    border:none;
+
     border-radius:20px;
+
+    box-shadow:var(--shadow);
+
     overflow:hidden;
-    transition:0.3s;
+
+    background:#fff;
+
 }
 
-.booking-card:hover{
-    transform:translateY(-8px);
-    box-shadow:0 12px 25px rgba(0,0,0,0.18);
+.profile-img{
+
+    width:150px;
+
+    height:150px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:4px solid #fff;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+    margin:auto;
+
 }
 
-.booking-card img{
-    border-top-left-radius:20px;
-    border-top-right-radius:20px;
+.profile-info h3{
+
+    font-weight:700;
+
+    margin-top:1rem;
+
 }
 
-.booking-card .card-body{
-    padding:20px;
+.profile-info p{
+
+    color:#666;
+
+    margin-bottom:.4rem;
+
 }
-.booking-card{
+
+.profile-stats{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:2rem;
+
+    margin-top:2rem;
+
+    flex-wrap:wrap;
+
+}
+
+.profile-stat{
+
+    text-align:center;
+
+}
+
+.profile-stat h4{
+
+    font-weight:700;
+
+    margin-bottom:.2rem;
+
+}
+
+.profile-stat span{
+
+    color:#666;
+
+    font-size:.9rem;
+
+}
+
+/* ==========================================
+   EDIT PROFILE
+========================================== */
+
+.profile-preview{
+
+    width:140px;
+
+    height:140px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    margin:auto;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+/* ==========================================
+   WISHLIST
+========================================== */
+
+.wishlist-card{
+
     border:none;
+
     border-radius:18px;
+
     overflow:hidden;
-    transition:0.3s ease;
+
+    transition:.3s ease;
+
+    box-shadow:var(--shadow);
+
+}
+
+.wishlist-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.wishlist-card img{
+
+    height:220px;
+
+    object-fit:cover;
+
+}
+
+.wishlist-empty{
+
+    text-align:center;
+
+    padding:5rem 1rem;
+
+}
+
+.wishlist-empty i{
+
+    font-size:4rem;
+
+    color:var(--primary);
+
+    margin-bottom:1rem;
+
+}
+
+/* ==========================================
+   BOOKING CARD
+========================================== */
+
+.booking-card{
+
+    border:none;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    transition:.3s ease;
+
+    box-shadow:var(--shadow);
+
 }
 
 .booking-card:hover{
+
     transform:translateY(-8px);
-    box-shadow:0 12px 30px rgba(0,0,0,0.18);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.18);
+
 }
 
 .booking-card img{
-    border-top-left-radius:18px;
-    border-top-right-radius:18px;
+
+    height:230px;
+
+    object-fit:cover;
+
 }
 
 .booking-card .card-body{
-    padding:20px;
+
+    padding:1.2rem!important;
+
 }
 
-.cancelled-card{
-    opacity:0.75;
-}
+.booking-card h5{
 
-.cancelled-card img{
-    filter:grayscale(60%);
-}
+    font-weight:700;
 
-.badge{
-    padding:10px 14px;
-    border-radius:20px;
 }
 
 .booking-card .btn{
+
     border-radius:10px;
+
 }
+
+.cancelled-card{
+
+    opacity:.75;
+
+}
+
+.cancelled-card img{
+
+    filter:grayscale(70%);
+
+}
+
+/* ==========================================
+   BADGES
+========================================== */
+
+.badge{
+
+    border-radius:20px;
+
+    padding:.55rem .9rem;
+
+    font-weight:500;
+
+}
+
+/* ==========================================
+   TABLES
+========================================== */
+
+.table{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+.table thead{
+
+    vertical-align:middle;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.card{
+
+    border:none;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.card:hover{
+
+    transition:.3s;
+
+}
+
+/* ==========================================
+   LIST GROUP
+========================================== */
+
+.list-group-item{
+
+    border:none;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.list-group-item:last-child{
+
+    border-bottom:none;
+
+}
+
+/* ==========================================
+   EMPTY STATES
+========================================== */
+
+.empty-state{
+
+    text-align:center;
+
+    padding:5rem 1rem;
+
+}
+
+.empty-state i{
+
+    font-size:4rem;
+
+    color:#ccc;
+
+    margin-bottom:1rem;
+
+}
+
+.empty-state h3{
+
+    font-weight:700;
+
+}
+
+.empty-state p{
+
+    color:#666;
+
+}
+
+/* ==========================================
+   IMAGE PREVIEW
+========================================== */
+
+#preview{
+
+    max-height:250px;
+
+    margin:auto;
+
+    border-radius:15px;
+
+    box-shadow:var(--shadow);
+
+}
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+.shadow-sm{
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08)!important;
+
+}
+
+.rounded-xl{
+
+    border-radius:18px;
+
+}
+
+.cursor-pointer{
+
+    cursor:pointer;
+
+}
+
+.text-primary-custom{
+
+    color:var(--primary)!important;
+
+}
+
+.bg-primary-custom{
+
+    background:var(--primary)!important;
+
+    color:#fff;
+
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width:992px){
+
+    .navbar{
+
+        height:auto;
+
+        padding:.8rem 1rem;
+
+    }
+
+    .search-bar{
+
+        width:100%;
+
+        max-width:100%;
+
+        margin-top:1rem;
+
+    }
+
+    .filters-wrapper{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:1rem;
+
+    }
+
+    .tax-toggle{
+
+        width:100%;
+
+        margin-left:0;
+
+    }
+
+    #map{
+
+        height:350px;
+
+    }
+
+    .profile-stats{
+
+        gap:1rem;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .container{
+
+        padding-left:15px;
+
+        padding-right:15px;
+
+    }
+
+    .navbar{
+
+        padding:.8rem;
+
+    }
+
+    .card-img-top{
+
+        height:250px;
+
+    }
+
+    .wishlist-card img{
+
+        height:220px;
+
+    }
+
+    .booking-card img{
+
+        height:220px;
+
+    }
+
+    .profile-img{
+
+        width:120px;
+
+        height:120px;
+
+    }
+
+    .profile-preview{
+
+        width:120px;
+
+        height:120px;
+
+    }
+
+    #map{
+
+        height:300px;
+
+    }
+
+    .f-info{
+
+        padding:1.5rem 1rem;
+
+    }
+
+    .f-info-links,
+    .f-info-socials,
+    .f-info-brand{
+
+        margin-bottom:.7rem;
+
+    }
+
+    .table-responsive{
+
+        border-radius:15px;
+
+    }
+
+}
+
+@media (max-width:576px){
+
+    h1{
+
+        font-size:2rem;
+
+    }
+
+    h2{
+
+        font-size:1.7rem;
+
+    }
+
+    h3{
+
+        font-size:1.4rem;
+
+    }
+
+    .card-img-top{
+
+        height:220px;
+
+    }
+
+    .wishlist-card img{
+
+        height:200px;
+
+    }
+
+    .booking-card img{
+
+        height:200px;
+
+    }
+
+    .search-btn{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+    .wishlist-btn{
+
+        width:38px;
+
+        height:38px;
+
+        font-size:1.1rem;
+
+    }
+
+    .badge{
+
+        font-size:.75rem;
+
+    }
+
+    #filters{
+
+        gap:1.3rem;
+
+    }
+
+    .filter{
+
+        min-width:70px;
+
+    }
+
+    .filter i{
+
+        font-size:1.2rem;
+
+    }
+
+    .filter p{
+
+        font-size:.75rem;
+
+    }
+
+}
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
+
+.fade-up{
+
+    animation:fadeUp .5s ease;
+
+}
+
+.fade-in{
+
+    animation:fadeIn .4s ease;
+
+}
+
+.zoom-in{
+
+    animation:zoomIn .35s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes zoomIn{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.95);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+    height:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#f2f2f2;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#c8c8c8;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--primary);
+
+}
+
+/* Firefox */
+
+*{
+
+    scrollbar-width:thin;
+
+    scrollbar-color:#c8c8c8 #f2f2f2;
+
+}
+
+/* ==========================================
+   SELECTION
+========================================== */
+
+::selection{
+
+    background:var(--primary);
+
+    color:#fff;
+
+}
+
+/* ==========================================
+   SMOOTH SCROLL
+========================================== */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+/* ==========================================
+   DISABLED BUTTON
+========================================== */
+
+button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+
+/* ==========================================
+   LINKS
+========================================== */
+
+a{
+
+    transition:.3s ease;
+
+}
+
+a:hover{
+
+    text-decoration:none;
+
+}
+
+/* ==========================================
+   IMAGE HOVER
+========================================== */
+
+img{
+
+    transition:.3s ease;
+
+}
+
+/* ==========================================
+   FINAL UTILITIES
+========================================== */
+
+.text-shadow{
+
+    text-shadow:0 2px 6px rgba(0,0,0,.2);
+
+}
+
+.hover-lift{
+
+    transition:.3s ease;
+
+}
+
+.hover-lift:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.rounded-20{
+
+    border-radius:20px;
+
+}
+
+.shadow-lg-custom{
+
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+.border-primary{
+
+    border:2px solid var(--primary)!important;
+
+}
+
+.bg-light-custom{
+
+    background:#fafafa;
+
+}
+
