@@ -456,6 +456,32 @@ img{
     font-size:.85rem;
 
 }
+.scroll-btn{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1px solid #ddd;
+    background:#fff;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.scroll-btn:hover{
+    background:#f5f5f5;
+    transform:scale(1.05);
+}
+
+.scroll-btn.left{
+    margin-right:10px;
+}
+
+.scroll-btn.right{
+    margin-left:10px;
+}
 
 /* ==========================================
    TAX TOGGLE

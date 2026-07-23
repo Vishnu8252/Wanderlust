@@ -78,27 +78,75 @@ module.exports.toggleBan = async (req, res) => {
 };
 
 
-
 module.exports.deleteUser = async (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const user = await User.findById(id);
+        // User exist?
+        const user = await User.findById(id);
 
-    if (!user) {
-        req.flash("error", "User not found!");
-        return res.redirect("/admin/users");
+        if (!user) {
+            req.flash("error", "User not found.");
+            return res.redirect("/admin/users");
+        }
+
+        // User ki saari listings
+        const listings = await Listing.find({ owner: id });
+
+        for (const listing of listings) {
+
+            // Listing ke bookings delete
+            await Booking.deleteMany({
+                listing: listing._id,
+            });
+
+            // Sab users ki wishlist se listing remove
+            await User.updateMany(
+                {},
+                {
+                    $pull: {
+                        wishlist: listing._id,
+                    },
+                }
+            );
+
+            // Reviews automatically delete ho jayenge
+            await Listing.findByIdAndDelete(listing._id);
+        }
+
+        // User ke diye hue reviews delete
+        await Review.deleteMany({
+            author: id,
+        });
+
+        // User ki bookings delete
+        await Booking.deleteMany({
+            user: id,
+        });
+
+        // User ki booking references remove
+        await User.updateMany(
+            {},
+            {
+                $pull: {
+                    bookings: {
+                        $in: user.bookings,
+                    },
+                },
+            }
+        );
+
+        // User delete
+        await User.findByIdAndDelete(id);
+
+        req.flash("success", "User and all related data deleted successfully.");
+        res.redirect("/admin/users");
+
+    } catch (err) {
+        console.log(err);
+        req.flash("error", err.message);
+        res.redirect("/admin/users");
     }
-
-    if (user.isAdmin) {
-        req.flash("error", "Admin cannot be deleted!");
-        return res.redirect("/admin/users");
-    }
-
-    await User.findByIdAndDelete(id);
-
-    req.flash("success", "User deleted successfully!");
-
-    return res.redirect("/admin/users");
 };
 
 

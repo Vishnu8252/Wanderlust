@@ -1,7 +1,9 @@
 <% layout("/layouts/boilerplate") %>
 
 <div class="filters-wrapper">
-
+    <button class="scroll-btn left" id="scrollLeft">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
     <div id="filters">
 
         <a href="/listings" class="filter <%= selectedCategory === "trending" ? "active" : "" %>">
@@ -80,6 +82,9 @@
         </a>
 
     </div>
+    <button class="scroll-btn right" id="scrollRight">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
 
     <div class="tax-toggle">
 
@@ -237,3 +242,22 @@ taxSwitch.addEventListener("change", () => {
 });
 
 </script>
+<script>
+
+    const filters = document.getElementById("filters");
+    
+    document.getElementById("scrollRight").onclick = () => {
+        filters.scrollBy({
+            left:350,
+            behavior:"smooth"
+        });
+    };
+    
+    document.getElementById("scrollLeft").onclick = () => {
+        filters.scrollBy({
+            left:-350,
+            behavior:"smooth"
+        });
+    };
+    
+    </script>

@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Listing = require("../models/listing");
+const Review = require("../models/review");
 
 // ==============================
 // Render Signup Form
@@ -119,10 +120,19 @@ module.exports.showProfile = async (req, res) => {
         return res.redirect("/listings");
     }
 
-    res.render("users/profile", {
-        user,
+    const listingCount = await Listing.countDocuments({
+        owner: user._id,
     });
 
+    const reviewCount = await Review.countDocuments({
+        author: user._id,
+    });
+
+    res.render("users/profile", {
+        user,
+        listingCount,
+        reviewCount,
+    });
 };
 
 
