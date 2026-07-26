@@ -86,7 +86,6 @@ module.exports.myBookings = async (req, res) => {
 // ==============================
 
 module.exports.cancelBooking = async (req, res) => {
-
     const { id } = req.params;
 
     const booking = await Booking.findById(id);
@@ -112,12 +111,29 @@ module.exports.cancelBooking = async (req, res) => {
         return res.redirect("/bookings");
     }
 
+    // Payment ID validation
+    if (
+        !booking.paymentId ||
+        typeof booking.paymentId !== "string" ||
+        !booking.paymentId.startsWith("pay_")
+    ) {
+        console.log("Invalid Payment ID:", booking.paymentId);
+
+        req.flash(
+            "error",
+            "Invalid payment ID. Refund cannot be processed."
+        );
+
+        return res.redirect("/bookings");
+    }
+
     try {
+        console.log("Refunding Payment:", booking.paymentId);
 
         const refund = await razorpay.payments.refund(
             booking.paymentId,
             {
-                amount: booking.totalPrice * 100, // amount in paise
+                amount: Math.round(booking.totalPrice * 100),
             }
         );
 
@@ -136,17 +152,15 @@ module.exports.cancelBooking = async (req, res) => {
         return res.redirect("/bookings");
 
     } catch (err) {
-
         console.error("Refund Error:", err);
 
         req.flash(
             "error",
-            err.error?.description || "Unable to process refund."
+            err.error?.description || err.message || "Unable to process refund."
         );
 
         return res.redirect("/bookings");
     }
-
 };
 // ==============================
 // Create Razorpay Order
@@ -154,9 +168,6 @@ module.exports.cancelBooking = async (req, res) => {
 
 module.exports.createOrder = async (req, res) => {
     try {
-        console.log("========== CREATE ORDER ==========");
-        console.log("Request Body:", req.body);
-
         const {
             listingId,
             checkIn,
@@ -229,8 +240,7 @@ module.exports.createOrder = async (req, res) => {
 
     } catch (err) {
 
-        console.log("========== RAZORPAY ERROR ==========");
-        console.error(err);
+       
 
         return res.status(500).json({
             success: false,
@@ -246,8 +256,7 @@ module.exports.verifyPayment = async (req, res) => {
 
     try {
 
-        console.log("========== VERIFY PAYMENT ==========");
-        console.log(req.body);
+        
 
         const {
             razorpay_order_id,
@@ -358,7 +367,7 @@ module.exports.verifyPayment = async (req, res) => {
 
         }
 
-        console.log("Booking Saved Successfully");
+    
 
         return res.json({
 
@@ -372,9 +381,6 @@ module.exports.verifyPayment = async (req, res) => {
 
     catch (err) {
 
-        console.log("========== VERIFY PAYMENT ERROR ==========");
-
-        console.error(err);
 
         return res.status(500).json({
 
