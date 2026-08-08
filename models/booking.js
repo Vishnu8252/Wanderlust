@@ -54,22 +54,33 @@ const bookingSchema = new Schema(
         default: "",
     },
 
-    paymentStatus: {
-        type: String,
-        enum: ["Pending", "Paid", "Failed", "Refunded"],
-        default: "Pending",
-    },
+    
 
     refundId: {
         type: String,
         default: "",
     },
 
+    paymentStatus: {
+        type: String,
+        enum: [
+            "Pending",
+            "Paid",
+            "Refunded",
+            "Refund Pending"
+        ],
+        default: "Pending"
+    },
+    
     refundStatus: {
         type: String,
-        enum: ["Not Refunded", "Refunded"],
-        default: "Not Refunded",
-    },
+        enum: [
+            "Pending",
+            "Refunded",
+            "Failed"
+        ],
+        default: "Pending"
+    }
 },
 {
     timestamps: true,
